@@ -1,6 +1,7 @@
 import requests
 import json
 
+# Replace with your actual Groq API key
 GROQ_API_KEY = "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"
 GROQ_API_URL = "https://api.groq.com/v1/chat/completions"
 
@@ -19,13 +20,16 @@ def chat_with_groq():
         }
 
         data = {
-            "model": "mixtral-8x7b-32768",
+            "model": "mixtral-8x7b-32768",  # Ensure this is a valid model
             "messages": [{"role": "user", "content": user_input}]
         }
 
         try:
             response = requests.post(GROQ_API_URL, headers=headers, data=json.dumps(data))
             response_json = response.json()
+
+            # 🔹 Debugging: Print full API response
+            print("\n🔍 API Response:", response_json)  
 
             # Extract and display the response from Groq
             if "choices" in response_json and response_json["choices"]:
