@@ -1,8 +1,7 @@
 import requests
 import json
 
-# Replace with your actual Groq API key
-GROQ_API_KEY = "your_groq_api_key_here"
+GROQ_API_KEY = "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"
 GROQ_API_URL = "https://api.groq.com/v1/chat/completions"
 
 def chat_with_groq():
