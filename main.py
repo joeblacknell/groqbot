@@ -1,47 +1,42 @@
 import requests
 import json
 
-# Replace with your actual Groq API key
 GROQ_API_KEY = "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"
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 
 def chat_with_groq():
-    print("Chat with Groq! Type 'quit' to exit.")
+    print("Welcome to Groq Chat! Type 'quit' to exit.")
 
     while True:
-        user_input = input("\nYou: ")
+        user_input = input("\nYou: ").strip()
         if user_input.lower() == "quit":
-            print("Goodbye!")
+            print("Exiting chat. Have a great day!")
             break
 
-        headers = {
-            "Authorization": f"Bearer {GROQ_API_KEY}",
-            "Content-Type": "application/json"
-        }
+        response = get_groq_response(user_input)
+        print("\nGroq:", response if response else "(No response received)")
 
-        data = {
-            "model": "mixtral-8x7b-32768",  # Ensure this is a valid model
-            "messages": [{"role": "user", "content": user_input}]
-        }
+def get_groq_response(user_input):
+    headers = {
+        "Authorization": f"Bearer {GROQ_API_KEY}",
+        "Content-Type": "application/json"
+    }
 
-        try:
-            response = requests.post(GROQ_API_URL, headers=headers, data=json.dumps(data))
-            
-            # 🔹 Print the status code and raw response for debugging
-            print("\n🔍 HTTP Status Code:", response.status_code)
-            print("🔍 Raw API Response:", response.text)
+    payload = {
+        "model": "mixtral-8x7b-32768",
+        "messages": [{"role": "user", "content": user_input}]
+    }
 
-            response_json = response.json()
+    try:
+        response = requests.post(GROQ_API_URL, headers=headers, json=payload)
+        response_json = response.json()
 
-            # Extract and display the response from Groq
-            if "choices" in response_json and response_json["choices"]:
-                bot_reply = response_json["choices"][0]["message"]["content"]
-                print("\nGroq:", bot_reply)
-            else:
-                print("\nGroq: (No response received)")
+        if response.status_code == 200 and "choices" in response_json:
+            return response_json["choices"][0]["message"]["content"]
+        return None
 
-        except Exception as e:
-            print("Error:", str(e))
+    except requests.exceptions.RequestException:
+        return None
 
 if __name__ == "__main__":
     chat_with_groq()
