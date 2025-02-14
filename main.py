@@ -26,10 +26,12 @@ def chat_with_groq():
 
         try:
             response = requests.post(GROQ_API_URL, headers=headers, data=json.dumps(data))
-            response_json = response.json()
+            
+            # 🔹 Print the status code and raw response for debugging
+            print("\n🔍 HTTP Status Code:", response.status_code)
+            print("🔍 Raw API Response:", response.text)
 
-            # 🔹 Debugging: Print full API response
-            print("\n🔍 API Response:", response_json)  
+            response_json = response.json()
 
             # Extract and display the response from Groq
             if "choices" in response_json and response_json["choices"]:
